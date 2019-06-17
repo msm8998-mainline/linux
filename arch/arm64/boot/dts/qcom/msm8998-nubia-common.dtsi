@@ -23,6 +23,19 @@
 	};
 };
 
+&pm8005_regulators {
+	vdd_s1-supply = <&vph_pwr>;
+
+	pm8005_s1: s1 { /* VDD_GFX supply */
+		regulator-min-microvolt = <524000>;
+		regulator-max-microvolt = <1100000>;
+		regulator-enable-ramp-delay = <500>;
+
+		/* Hack until we rig up the gpu consumer */
+		regulator-always-on;
+	};
+};
+
 &rpm_requests {
 	regulators-0 {
 		compatible = "qcom,rpm-pm8998-regulators";
