@@ -50,6 +50,8 @@ struct mdp5_ctl {
 	/* True if the current CTL has FLUSH bits pending for single FLUSH. */
 	bool flush_pending;
 
+	bool busy;
+
 	struct mdp5_ctl *pair; /* Paired CTL to be flushed together */
 };
 
@@ -210,6 +212,11 @@ static void send_start_signal(struct mdp5_ctl *ctl)
 	unsigned long flags;
 
 	spin_lock_irqsave(&ctl->hw_lock, flags);
+	if (ctl->busy) {
+		spin_unlock_irqrestore(&ctl->hw_lock, flags);
+		return;
+	}
+	ctl->busy = true;
 	ctl_write(ctl, REG_MDP5_CTL_START(ctl->id), 1);
 	spin_unlock_irqrestore(&ctl->hw_lock, flags);
 }
@@ -241,6 +248,11 @@ int mdp5_ctl_set_encoder_state(struct mdp5_ctl *ctl,
 	}
 
 	return 0;
+}
+
+void mdp5_ctl_commit_finished(struct mdp5_ctl *ctl)
+{
+	ctl->busy = false;
 }
 
 /*
