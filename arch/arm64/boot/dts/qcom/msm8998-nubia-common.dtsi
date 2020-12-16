@@ -206,7 +206,12 @@
 		};
 
 		vreg_l24a_3p075: l24 {
-			regulator-min-microvolt = <1848000>;
+			/*
+			 * HACK: Set min-microvolt to 3V unlike the 1,8V on downstream;
+			 *       until we have working plug detection to switch between these
+			 *       voltages this shall do so we at least have working USB.
+			 */
+			regulator-min-microvolt = <3088000>;
 			regulator-max-microvolt = <3088000>;
 		};
 

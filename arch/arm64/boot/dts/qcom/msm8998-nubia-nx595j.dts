@@ -18,7 +18,3 @@
 &vreg_l21a_2p95 {
 	regulator-min-microvolt = <2960000>;
 };
-
-&vreg_l24a_3p075 {
-	regulator-min-microvolt = <3088000>;
-};
