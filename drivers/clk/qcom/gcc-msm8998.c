@@ -2117,6 +2117,7 @@ static struct clk_branch gcc_bimc_gfx_clk = {
 		.enable_mask = BIT(0),
 		.hw.init = &(struct clk_init_data){
 			.name = "gcc_bimc_gfx_clk",
+			.flags = CLK_IS_CRITICAL,
 			.ops = &clk_branch2_ops,
 		},
 	},
@@ -2257,6 +2258,7 @@ static struct clk_rcg2 hmss_gpll0_clk_src = {
 		.name = "hmss_gpll0_clk_src",
 		.parent_data = gcc_parent_data_1,
 		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
+		.flags = CLK_IS_CRITICAL,
 		.ops = &clk_rcg2_ops,
 	},
 };
