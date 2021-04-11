@@ -176,7 +176,8 @@ static int pattern_trig_start_pattern(struct led_classdev *led_cdev)
 
 	if (data->type == PATTERN_TYPE_HW) {
 		return led_cdev->pattern_set(led_cdev, data->patterns,
-					     data->npatterns, data->repeat);
+					     data->npatterns,
+					     data->last_repeat);
 	}
 
 	/* At least 2 tuples for software pattern. */
