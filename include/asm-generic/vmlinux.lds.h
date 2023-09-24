@@ -941,6 +941,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
 		INIT_CALLS_LEVEL(rootfs)				\
 		INIT_CALLS_LEVEL(6)					\
 		INIT_CALLS_LEVEL(7)					\
+		INIT_CALLS_LEVEL(8)					\
 		__initcall_end = .;
 
 #define CON_INITCALL							\

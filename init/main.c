@@ -1309,6 +1309,7 @@ static initcall_entry_t *initcall_levels[] __initdata = {
 	__initcall5_start,
 	__initcall6_start,
 	__initcall7_start,
+	__initcall8_start,
 	__initcall_end,
 };
 
@@ -1322,6 +1323,7 @@ static const char *initcall_level_names[] __initdata = {
 	"fs",
 	"device",
 	"late",
+	"postfs",
 };
 
 static int __init ignore_unknown_bootoption(char *param, char *val,
@@ -1355,13 +1357,30 @@ static void __init do_initcalls(void)
 	if (!command_line)
 		panic("%s: Failed to allocate %zu bytes\n", __func__, len);
 
-	for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++) {
+	for (level = 0; level < ARRAY_SIZE(initcall_levels) - 2; level++) {
 		/* Parser modifies command_line, restore it each time */
 		strcpy(command_line, saved_command_line);
 		do_initcall_level(level, command_line);
 	}
 
 	kfree(command_line);
+}
+
+static void __init do_postfsinitcalls(void)
+{
+        int level = ARRAY_SIZE(initcall_levels) - 2;
+        size_t len = strlen(saved_command_line) + 1;
+        char *command_line;
+
+        command_line = kzalloc(len, GFP_KERNEL);
+        if (!command_line)
+                panic("%s: Failed to allocate %zu bytes\n", __func__, len);
+
+        /* Parser modifies command_line, restore it each time */
+        strcpy(command_line, saved_command_line);
+        do_initcall_level(level, command_line);
+
+        kfree(command_line);
 }
 
 /*
@@ -1620,4 +1639,5 @@ static noinline void __init kernel_init_freeable(void)
 	 */
 
 	integrity_load_keys();
+	do_postfsinitcalls();
 }

@@ -158,6 +158,7 @@ extern initcall_entry_t __initcall4_start[];
 extern initcall_entry_t __initcall5_start[];
 extern initcall_entry_t __initcall6_start[];
 extern initcall_entry_t __initcall7_start[];
+extern initcall_entry_t __initcall8_start[];
 extern initcall_entry_t __initcall_end[];
 
 extern struct file_system_type rootfs_fs_type;
@@ -306,6 +307,7 @@ extern struct module __this_module;
 #define device_initcall_sync(fn)	__define_initcall(fn, 6s)
 #define late_initcall(fn)		__define_initcall(fn, 7)
 #define late_initcall_sync(fn)		__define_initcall(fn, 7s)
+#define postfs_initcall(fn)		__define_initcall(fn, 8)
 
 #define __initcall(fn) device_initcall(fn)
 
