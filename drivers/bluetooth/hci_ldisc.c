@@ -926,7 +926,7 @@ static void __exit hci_uart_exit(void)
 	tty_unregister_ldisc(&hci_uart_ldisc);
 }
 
-module_init(hci_uart_init);
+postfs_initcall(hci_uart_init);
 module_exit(hci_uart_exit);
 
 MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
