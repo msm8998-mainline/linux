@@ -122,6 +122,7 @@ extern void cleanup_module(void);
 #define device_initcall_sync(fn)	module_init(fn)
 #define late_initcall(fn)		module_init(fn)
 #define late_initcall_sync(fn)		module_init(fn)
+#define postfs_initcall(fn)		module_init(fn)
 
 #define console_initcall(fn)		module_init(fn)
 

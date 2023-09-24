@@ -292,6 +292,7 @@ extern bool initcall_debug;
 #define device_initcall_sync(fn)	__define_initcall(fn, 6s)
 #define late_initcall(fn)		__define_initcall(fn, 7)
 #define late_initcall_sync(fn)		__define_initcall(fn, 7s)
+#define postfs_initcall(fn)		__define_initcall(fn, 8)
 
 #define __initcall(fn) device_initcall(fn)
 
