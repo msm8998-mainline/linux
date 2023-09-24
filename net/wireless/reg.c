@@ -4309,7 +4309,7 @@ static int __init regulatory_init_db(void)
 	return 0;
 }
 #ifndef MODULE
-late_initcall(regulatory_init_db);
+postfs_initcall(regulatory_init_db);
 #endif
 
 int __init regulatory_init(void)
