@@ -10,3 +10,15 @@
 	compatible = "nubia,nx595j", "qcom,msm8998";
 	chassis-type = "handset";
 };
+
+&vreg_s5a_2p04 {
+	regulator-min-microvolt = <1800000>;
+};
+
+&vreg_l21a_2p95 {
+	regulator-min-microvolt = <2960000>;
+};
+
+&vreg_l24a_3p075 {
+	regulator-min-microvolt = <3088000>;
+};
