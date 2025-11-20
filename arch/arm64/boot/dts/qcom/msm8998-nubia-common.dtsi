@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/*
+ * Copyright (c) 2025, Giovanni Ricca <giovanniricca@proton.me>
+ */
+
+/dts-v1/;
+
+#include "msm8998.dtsi"
+#include "pm8005.dtsi"
+#include "pm8998.dtsi"
+#include "pmi8998.dtsi"
+
+/ {
+	/* required for bootloader to select correct board */
+	qcom,msm-id = <292 0x20001>; /* 8998 v2.1 */
+	qcom,board-id = <8 0>;
+};
