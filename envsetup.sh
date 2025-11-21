@@ -20,6 +20,7 @@ export BOARD_RAMDISK_OFFSET=""
 export BOARD_SECOND_OFFSET=""
 export BOARD_TAGS_OFFSET=""
 export BOARD_KERNEL_CMDLINE="clk_ignore_unused quiet loglevel=5 modprobe.blacklist=ipa"
+export SIGN_BOOT_IMG=0 # 0 = false; 1 = true
 
 ### End
 
@@ -66,6 +67,12 @@ function bootimg_gen() {
         --tags_offset "$BOARD_TAGS_OFFSET" \
         --pagesize "$BOARD_PAGE_SIZE" \
         -o "$output_bootimg"
+
+    if [ "$SIGN_BOOT_IMG" -eq 1 ]; then
+        signer/boot_signer /boot $output_bootimg \
+            signer/verity.pk8 signer/verity.x509.pem \
+            $output_bootimg
+    fi
 
     echo "Successfully created boot image: $output_bootimg"
 }
