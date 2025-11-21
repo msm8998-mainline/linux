@@ -11,6 +11,10 @@
 	chassis-type = "handset";
 };
 
+&framebuffer0 {
+	height = <2040>;
+};
+
 &vreg_s5a_2p04 {
 	regulator-min-microvolt = <1800000>;
 };
