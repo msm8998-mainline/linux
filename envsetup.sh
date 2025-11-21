@@ -7,20 +7,20 @@ export DEFCONFIG=msm8998_defconfig
 export KBUILD_OUTPUT=out
 export KBUILD_BUILD_USER="$USER"
 export KBUILD_BUILD_HOST=$(cat /etc/hostname)
-export DTB_IMAGE="qcom/msm8998-mtp.dtb" # Change it to your preferred device-tree.
+export DTB_IMAGE="qcom/msm8998-nubia-nx595j.dtb" # Change it to your preferred device-tree.
 export KERNEL_IMAGE="Image.gz"
 export RAMDISK_PATH="../initramfs" # Change it to your preferred initramfs root path.
 export RAMDISK_IMAGE="initramfs.cpio.gz"
 
 # mkbootimg vars (Fill the values with the help of AIK)
 export BOARD_PAGE_SIZE="4096"
-export BOARD_KERNEL_BASE=""
-export BOARD_KERNEL_OFFSET=""
-export BOARD_RAMDISK_OFFSET=""
-export BOARD_SECOND_OFFSET=""
-export BOARD_TAGS_OFFSET=""
+export BOARD_KERNEL_BASE="0x00000000"
+export BOARD_KERNEL_OFFSET="0x00008000"
+export BOARD_RAMDISK_OFFSET="0x01000000"
+export BOARD_SECOND_OFFSET="0x00f00000"
+export BOARD_TAGS_OFFSET="0x00000100"
 export BOARD_KERNEL_CMDLINE="clk_ignore_unused quiet loglevel=5 modprobe.blacklist=ipa"
-export SIGN_BOOT_IMG=0 # 0 = false; 1 = true
+export SIGN_BOOT_IMG=1 # 0 = false; 1 = true
 
 ### End
 
