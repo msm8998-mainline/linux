@@ -6,6 +6,7 @@
 /*
  * TODOs:
  * Touchscreen: Cleanup, figure out the proper values, (de)commonize if needed.
+ * Panel: Cleanup, figure out the proper values, (de)commonize if needed.
  */
 
 /dts-v1/;
@@ -334,6 +335,36 @@
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <81 4>;
 
+	/* Panel START */
+	mdss_dsi_active: mdss_dsi_active {
+		pins = "gpio94", "gpio91", "gpio51";
+		function = "gpio";
+		drive-strength = <8>;
+		bias-disable;
+	};
+
+	mdss_dsi_suspend: mdss_dsi_suspend {
+		pins = "gpio94", "gpio91", "gpio51";
+		function = "gpio";
+		drive-strength = <2>;
+		bias-pull-down;
+	};
+
+	mdss_te_active: mdss_te_active {
+		pins = "gpio10";
+		function = "mdp_vsync_a";
+		drive-strength = <2>;
+		bias-pull-down;
+	};
+
+	mdss_te_suspend: mdss_te_suspend {
+		pins = "gpio10";
+		function = "mdp_vsync_a";
+		drive-strength = <2>;
+		bias-pull-down;
+	};
+	/* Panel END */
+
 	/* Touchscreen START */
 	synaptics_int_active: synaptics_int_active {
 		pins = "gpio125";
@@ -430,3 +461,98 @@
 	bias-disable;
 };
 /* Touchscreen END */
+
+/* Panel START */
+&mdss {
+	status = "okay";
+};
+
+&mdss_mdp {
+	status = "okay";
+};
+
+&mdss_dsi0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	vdd-supply = <&vreg_l1a_0p875>;
+	vdda-supply = <&vreg_l2a_1p2>;
+
+	panel: panel@0 {
+		compatible = "jdi,fhd-r63452";
+		reg = <0x0>;
+
+		backlight = <&pmi8998_wled>;
+		reset-gpios = <&tlmm 94 GPIO_ACTIVE_LOW>;
+		disp-te-gpios = <&tlmm 10 GPIO_ACTIVE_LOW>;
+
+		ibb-supply = <&ibb>;
+		lab-supply = <&lab>;
+		vddio-supply = <&vreg_l14a_1p88>;
+
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&mdss_dsi_active &mdss_te_active>;
+		pinctrl-1 = <&mdss_dsi_suspend &mdss_te_suspend>;
+
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&mdss_dsi0_out>;
+			};
+		};
+	};
+};
+
+&pmi8998_wled {
+	status = "okay";
+
+	default-brightness = <800>;
+	qcom,switching-freq = <800>;
+	qcom,ovp-millivolt = <29600>;
+	qcom,current-boost-limit = <970>;
+	qcom,current-limit-microamp = <25000>;
+	qcom,num-strings = <4>;
+};
+
+&mdss_dsi0_phy {
+	status = "okay";
+	vdds-supply = <&vreg_l1a_0p875>;
+};
+
+&mdss_dsi0_out {
+	remote-endpoint = <&panel_in>;
+	data-lanes = <0 1 2 3>;
+};
+
+&ibb {
+	regulator-min-microvolt = <4600000>;
+	regulator-max-microvolt = <6000000>;
+	regulator-min-microamp = <800000>;
+	regulator-max-microamp = <800000>;
+	regulator-enable-ramp-delay = <200>;
+	regulator-over-current-protection;
+	regulator-pull-down;
+	regulator-ramp-delay = <1>;
+	regulator-settling-time-up-us = <600>;
+	regulator-settling-time-down-us = <1000>;
+	regulator-soft-start;
+	qcom,discharge-resistor-kohms = <300>;
+	regulator-always-on;
+};
+
+&lab {
+	regulator-min-microvolt = <4600000>;
+	regulator-max-microvolt = <6000000>;
+	qcom,soft-start-us = <800>;
+	regulator-min-microamp = <200000>;
+	regulator-max-microamp = <200000>;
+	regulator-enable-ramp-delay = <500>;
+	regulator-over-current-protection;
+	regulator-pull-down;
+	regulator-ramp-delay = <1>;
+	regulator-settling-time-up-us = <50000>;
+	regulator-settling-time-down-us = <3000>;
+	regulator-soft-start;
+	regulator-always-on;
+};
+/* Panel END */
