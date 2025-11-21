@@ -36,6 +36,13 @@
 	};
 };
 
+&qusb2phy {
+	status = "okay";
+
+	vdda-pll-supply = <&vreg_l12a_1p8>;
+	vdda-phy-dpdm-supply = <&vreg_l24a_3p075>;
+};
+
 &rpm_requests {
 	regulators-0 {
 		compatible = "qcom,rpm-pm8998-regulators";
@@ -236,4 +243,23 @@
 
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <81 4>;
+};
+
+&usb3 {
+	status = "okay";
+
+	/* Disable USB3 pipe_clk requirement */
+	qcom,select-utmi-as-pipe-clk;
+};
+
+&usb3_dwc3 {
+	/* Drop the unused USB 3 PHY */
+	phys = <&qusb2phy>;
+	phy-names = "usb2-phy";
+
+	/* Fastest mode for USB 2 */
+	maximum-speed = "high-speed";
+
+	/* Force to peripheral until we can switch modes */
+	dr_mode = "peripheral";
 };
