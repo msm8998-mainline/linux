@@ -3,6 +3,11 @@
  * Copyright (c) 2025, Giovanni Ricca <giovanniricca@proton.me>
  */
 
+/*
+ * TODOs:
+ * Touchscreen: Cleanup, figure out the proper values, (de)commonize if needed.
+ */
+
 /dts-v1/;
 
 #include "msm8998.dtsi"
@@ -305,6 +310,9 @@
 		vreg_l28_3p0: l28 {
 			regulator-min-microvolt = <2856000>;
 			regulator-max-microvolt = <2856000>;
+			/* Touchscreen START */
+			regulator-allow-set-load; /* synaptics vdd_ana */
+			/* Touchscreen END */
 		};
 
 		vreg_lvs1a_1p8: lvs1 { };
@@ -325,6 +333,22 @@
 
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <81 4>;
+
+	/* Touchscreen START */
+	synaptics_int_active: synaptics_int_active {
+		pins = "gpio125";
+		function = "gpio";
+		drive-strength = <16>;
+		bias-pull-up;
+	};
+
+	synaptics_reset_active: synaptics_reset_active {
+		pins = "gpio89";
+		function = "gpio";
+		drive-strength = <16>;
+		bias-pull-up;
+	};
+	/* Touchscreen END */
 };
 
 &ufshc {
@@ -362,3 +386,47 @@
 	/* Force to peripheral until we can switch modes */
 	dr_mode = "peripheral";
 };
+
+/* Touchscreen START */
+&blsp1_i2c5 {
+	status = "okay";
+
+	touchscreen@20 {
+		compatible = "syna,rmi4-i2c";
+		reg = <0x20>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		interrupt-parent = <&tlmm>;
+		interrupts = <125 IRQ_TYPE_EDGE_FALLING>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&synaptics_int_active &synaptics_reset_active>;
+
+		vdd-supply = <&vreg_l14a_1p88>;
+		vio-supply = <&vreg_l6a_1p8>;
+
+		syna,reset-delay-ms = <20>;
+		syna,startup-delay-ms = <20>;
+
+		rmi4-f01@1 {
+			reg = <0x01>;
+			syna,nosleep-mode = <1>;
+		};
+
+		rmi4-f12@12 {
+			reg = <0x12>;
+			syna,rezero-wait-ms = <20>;
+			syna,sensor-type = <1>;
+			touchscreen-x-mm = <68>;
+			touchscreen-y-mm = <122>;
+		};
+	};
+};
+
+&blsp1_i2c5_sleep {
+	/delete-property/ bias-pull-up;
+	/* Configure a no-pull on TP I2C sleep to match downstream. */
+	bias-disable;
+};
+/* Touchscreen END */
