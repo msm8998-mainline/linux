@@ -22,3 +22,9 @@
 &vreg_l21a_2p95 {
 	regulator-min-microvolt = <2960000>;
 };
+
+/* Panel START */
+&panel {
+	compatible = "jdi,fhd-nt35596s";
+};
+/* Panel END */
