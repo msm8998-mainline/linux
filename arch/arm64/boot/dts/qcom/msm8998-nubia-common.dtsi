@@ -56,6 +56,14 @@
 			reg = <0x0 0x9d400000 0x0 0x2400000>;
 			no-map;
 		};
+
+		/* GPU START */
+		zap_shader_region: gpu@f7900000 {
+			compatible = "shared-dma-pool";
+			reg = <0x0 0xf7900000 0x0 0x2000>;
+			no-map;
+		};
+		/* GPU END */
 	};
 
 	vph_pwr: vph-pwr-regulator {
@@ -556,3 +564,46 @@
 	regulator-always-on;
 };
 /* Panel END */
+
+/* GPU START */
+&gpucc {
+	status = "okay";
+};
+
+&gpu_mem {
+	compatible = "shared-dma-pool";
+};
+
+&adreno_gpu {
+	status = "okay";
+
+	zap-shader {
+		memory-region = <&zap_shader_region>; // gpu_mem?
+		firmware-name = "qcom/msm8998/nubia/a540_zap.mbn";
+	};
+
+	/*
+	 * We are lacking support for the GPU regulator. Hence, disable higher
+	 * frequencies for now to prevent the platform from hanging on high
+	 * graphics loads. Perhaps the pm8005_s1 voltage below could be
+	 * adjusted but I'd rather not touch it.
+	 */
+	opp-table {
+		/delete-node/ opp-710000097;
+		/delete-node/ opp-670000048;
+		/delete-node/ opp-596000097;
+		/delete-node/ opp-515000097;
+		/delete-node/ opp-414000000;
+		/delete-node/ opp-342000000;
+	};
+};
+
+/*
+ * HACK: Shoot GPU voltage high to stabilize Adreno 540 at high frequencies
+ *       until the GPU CPR is brought up.
+ */
+&pm8005_s1 {
+	regulator-min-microvolt = <988000>; /* 0,524V -> 0,988V */
+	//regulator-max-microvolt = <1100000>;
+};
+/* GPU END */
