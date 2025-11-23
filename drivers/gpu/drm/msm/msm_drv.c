@@ -1316,7 +1316,7 @@ static void __exit msm_drm_unregister(void)
 	msm_dpu_unregister();
 }
 
-module_init(msm_drm_register);
+late_initcall(msm_drm_register);
 module_exit(msm_drm_unregister);
 
 MODULE_AUTHOR("Rob Clark <robdclark@gmail.com");
