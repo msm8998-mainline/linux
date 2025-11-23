@@ -606,3 +606,13 @@
 	//regulator-max-microvolt = <1100000>;
 };
 /* GPU END */
+
+/* Misc START */
+&apc_cprh {
+	status = "okay";
+};
+
+&cpufreq_hw {
+	status = "okay";
+};
+/* Misc END */
