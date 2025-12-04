@@ -19,7 +19,7 @@ export BOARD_KERNEL_OFFSET="0x00008000"
 export BOARD_RAMDISK_OFFSET="0x01000000"
 export BOARD_SECOND_OFFSET="0x00f00000"
 export BOARD_TAGS_OFFSET="0x00000100"
-export BOARD_KERNEL_CMDLINE="console=tty0 clk_ignore_unused pd_ignore_unused modprobe.blacklist=ipa PMOS_NOSPLASH pmos.debug-shell pmos_boot_uuid=5b81d184-ea26-460c-9eef-a7b8a2a719c7 pmos_root_uuid=e07149a1-ea26-443f-ba91-29edffb32d08 pmos_rootfsopts=defaults"
+export BOARD_KERNEL_CMDLINE="console=tty0 clk_ignore_unused pd_ignore_unused modprobe.blacklist=ipa arm-smmu.disable_bypass=0 iommu.passthrough=1 PMOS_NOSPLASH pmos.debug-shell pmos_boot_uuid=5b81d184-ea26-460c-9eef-a7b8a2a719c7 pmos_root_uuid=e07149a1-ea26-443f-ba91-29edffb32d08 pmos_rootfsopts=defaults"
 export SIGN_BOOT_IMG=1 # 0 = false; 1 = true
 
 ### End
